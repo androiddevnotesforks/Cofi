@@ -34,6 +34,7 @@ import com.omelan.cofi.share.model.StepType
 import com.omelan.cofi.share.timer.MultiplierControllers
 import com.omelan.cofi.share.utils.roundToDecimals
 import com.omelan.cofi.share.utils.toStringShort
+import com.omelan.cofi.share.utils.toStringShortWithDecimals
 import com.omelan.cofi.ui.Spacing
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -130,7 +131,7 @@ private fun ColumnScope.ManualContent(
             modifier = Modifier
                 .weight(1f, true)
                 .focusRequester(focusRequester),
-            value = (combinedCoffeeWeight * weightMultiplier).toString(),
+            value = (combinedCoffeeWeight * weightMultiplier).toStringShortWithDecimals(),
             onValueChange = {
                 val newWeightMultiplier =
                     ((it.toFloatOrNull() ?: combinedCoffeeWeight) / combinedCoffeeWeight)
@@ -149,7 +150,7 @@ private fun ColumnScope.ManualContent(
         Text(text = ":")
         OutlinedNumbersField(
             modifier = Modifier.weight(1f, true),
-            value = (combinedWaterWeight * weightMultiplier).toString(),
+            value = (combinedWaterWeight * weightMultiplier).toStringShortWithDecimals(),
             onValueChange = {
                 val newWeightMultiplier =
                     ((it.toFloatOrNull() ?: combinedWaterWeight) / combinedWaterWeight)

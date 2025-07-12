@@ -56,6 +56,7 @@ fun String.safeToInt(): Int {
 }
 
 fun Float.toStringShort(): String = DecimalFormat("0.#").format(this)
+fun Float.toStringShortWithDecimals(): String = DecimalFormat("0.00").format(this)
 fun Float.roundToDecimals(scale: Int = 1) = try {
     this.toBigDecimal()
         .setScale(scale, RoundingMode.HALF_EVEN).toFloat()
