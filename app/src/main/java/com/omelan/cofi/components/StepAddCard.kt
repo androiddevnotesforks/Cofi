@@ -21,6 +21,7 @@ import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
@@ -130,7 +131,13 @@ fun StepAddCard(
                 .padding(Spacing.medium)
                 .animateContentSize(),
         ) {
-            FlowRow(modifier = Modifier.fillMaxWidth(), Arrangement.Center) {
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                Arrangement.spacedBy(
+                    Spacing.xSmall,
+                    Alignment.CenterHorizontally,
+                ),
+            ) {
                 StepType.entries.forEachIndexed { index, stepType ->
                     ToggleButton(
                         onCheckedChange = {
