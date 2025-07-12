@@ -48,7 +48,7 @@ fun String.safeToInt(): Int {
         else -> {
             try {
                 this.trim().toInt()
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 0
             }
         }
@@ -60,6 +60,6 @@ fun Float.toStringShortWithDecimals(): String = DecimalFormat("0.00").format(thi
 fun Float.roundToDecimals(scale: Int = 1) = try {
     this.toBigDecimal()
         .setScale(scale, RoundingMode.HALF_EVEN).toFloat()
-} catch (e: Exception) {
+} catch (_: Exception) {
     this
 }

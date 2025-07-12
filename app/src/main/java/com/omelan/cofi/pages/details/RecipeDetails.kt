@@ -262,7 +262,7 @@ fun RecipeDetails(
         }
     }
 
-    suspend fun startRecipe() = coroutineScope.launch {
+    fun startRecipe() = coroutineScope.launch {
         collapse()
         launch {
             lazyListState.animateScrollToItem(if (recipe.description.isNotBlank()) 1 else 0)
