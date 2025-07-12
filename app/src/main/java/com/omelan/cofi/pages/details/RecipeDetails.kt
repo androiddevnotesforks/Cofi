@@ -394,11 +394,16 @@ fun RecipeDetails(
         topBar = {
             PiPAwareAppBar(
                 title = {
+                    val textStyle = LocalTextStyle.current
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             painter = painterResource(id = recipe.recipeIcon.icon),
                             contentDescription = null,
-                            modifier = Modifier.padding(end = Spacing.small),
+                            modifier = Modifier
+                                .padding(end = Spacing.small)
+                                .size(
+                                    textStyle.fontSize.value.dp,
+                                ),
                         )
                         Text(
                             text = recipe.name,
