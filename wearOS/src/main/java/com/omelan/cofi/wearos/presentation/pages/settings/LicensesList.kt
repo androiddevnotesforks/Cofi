@@ -3,6 +3,7 @@
 package com.omelan.cofi.wearos.presentation.pages.settings
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,9 +19,10 @@ import androidx.wear.compose.foundation.lazy.AutoCenteringParams
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
+import androidx.wear.compose.foundation.rotary.rotaryScrollable
 import androidx.wear.compose.material.*
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
-import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
 import com.omelan.cofi.share.model.Dependency
 import com.omelan.cofi.share.model.License
 import com.omelan.cofi.share.utils.parseJsonToDependencyList
@@ -54,9 +56,9 @@ fun LicensesList() {
         ScalingLazyColumn(
             modifier = Modifier
                 .background(MaterialTheme.colors.background)
-                .rotaryWithScroll(
+                .rotaryScrollable(
+                    behavior = RotaryScrollableDefaults.behavior(scalingLazyListState),
                     focusRequester = focusRequester,
-                    scrollableState = scalingLazyListState,
                 ),
             state = scalingLazyListState,
             autoCentering = AutoCenteringParams(0, 0),
@@ -74,7 +76,7 @@ fun LicensesList() {
 
 @Composable
 fun DependencyItem(dependency: Dependency, afterOpen: () -> Unit = {}) {
-    val activity = LocalContext.current as ComponentActivity
+    val activity = LocalActivity.current as ComponentActivity
 
     Card(
         onClick = {

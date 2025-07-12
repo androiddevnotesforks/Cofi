@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.rotary.onRotaryScrollEvent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,7 +19,6 @@ import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.Stepper
 import androidx.wear.compose.material.Text
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
-import com.google.android.horologist.compose.rotaryinput.onRotaryInputAccumulated
 import com.omelan.cofi.share.utils.roundToDecimals
 import com.omelan.cofi.wearos.R
 import kotlin.math.roundToInt
@@ -39,20 +39,21 @@ fun MultiplierPage(
 
     Stepper(
         modifier = Modifier
-            .onRotaryInputAccumulated {
+            .onRotaryScrollEvent { event ->
                 when {
-                    it > 0 -> changeMultiplier(
+                    event.horizontalScrollPixels > 0f -> changeMultiplier(
                         (multiplier + step)
                             .roundToDecimals()
                             .coerceIn(range),
                     )
 
-                    it < 0 -> changeMultiplier(
+                    event.horizontalScrollPixels < 0f -> changeMultiplier(
                         (multiplier - step)
                             .roundToDecimals()
                             .coerceIn(range),
                     )
                 }
+                true
             }
             .focusRequester(focusRequester)
             .focusable(),

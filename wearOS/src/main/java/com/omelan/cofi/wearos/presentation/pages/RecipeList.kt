@@ -12,7 +12,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -21,10 +20,12 @@ import androidx.navigation.NavHostController
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
+import androidx.wear.compose.foundation.rotary.rotaryScrollable
 import androidx.wear.compose.material.*
 import androidx.wear.compose.navigation.composable
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
-import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
 import com.omelan.cofi.share.model.Recipe
 import com.omelan.cofi.share.model.RecipeIcon
 import com.omelan.cofi.share.model.RecipeViewModel
@@ -91,7 +92,10 @@ fun RecipeList(
         ScalingLazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .rotaryWithScroll(scrollableState = lazyListState, focusRequester)
+                .rotaryScrollable(
+                    behavior = RotaryScrollableDefaults.behavior(lazyListState),
+                    focusRequester = focusRequester,
+                )
                 .background(MaterialTheme.colors.background),
             state = lazyListState,
             verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -140,7 +144,7 @@ fun RecipeList(
     }
 }
 
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
+@Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
     val recipes = listOf(

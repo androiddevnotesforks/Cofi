@@ -27,7 +27,6 @@ import androidx.wear.compose.foundation.edgeSwipeToDismiss
 import androidx.wear.compose.material.*
 import androidx.wear.compose.navigation.composable
 import com.google.android.horologist.compose.ambient.AmbientAware
-import com.google.android.horologist.compose.ambient.AmbientState
 import com.omelan.cofi.share.DataStore
 import com.omelan.cofi.share.model.*
 import com.omelan.cofi.share.pages.Destinations
@@ -153,7 +152,7 @@ fun RecipeDetails(
         dataStore = dataStore,
         doneTrackColor = MaterialTheme.colors.primary,
     )
-    val context = LocalContext.current
+//    val context = LocalContext.current
 
     LaunchedEffect(timerControllers.isTimerRunning) {
         onTimerRunning(timerControllers.isTimerRunning)
@@ -174,9 +173,9 @@ fun RecipeDetails(
     LaunchedEffect(timerControllers.currentStep) {
         timerControllers.animationControllers.progressAnimation(Unit)
     }
-    AmbientAware(isAlwaysOnScreen = timerControllers.isTimerRunning) { ambientStateUpdate ->
-        LaunchedEffect(key1 = ambientStateUpdate.ambientState) {
-            val isAmbient = ambientStateUpdate.ambientState is AmbientState.Ambient
+    AmbientAware { ambientStateUpdate ->
+        LaunchedEffect(key1 = ambientStateUpdate.isAmbient) {
+            val isAmbient = ambientStateUpdate.isAmbient
             if (isAmbient) {
                 pagerState.scrollToPage(0)
             }

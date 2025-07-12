@@ -3,6 +3,7 @@
 package com.omelan.cofi.wearos.presentation.pages.settings
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.*
@@ -14,9 +15,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
+import androidx.wear.compose.foundation.rotary.rotaryScrollable
 import androidx.wear.compose.material.*
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
-import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
 import com.omelan.cofi.share.*
 import com.omelan.cofi.share.R
 import com.omelan.cofi.wearos.presentation.components.OpenOnPhoneConfirm
@@ -28,7 +30,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Settings(navigateToLicenses: () -> Unit) {
-    val activity = LocalContext.current as ComponentActivity
+    val activity = LocalActivity.current as ComponentActivity
     val dataStore = DataStore(activity)
     val lazyListState = rememberScalingLazyListState()
     val focusRequester = remember { FocusRequester() }
@@ -42,8 +44,8 @@ fun Settings(navigateToLicenses: () -> Unit) {
         .collectAsState(initial = STEP_VIBRATION_DEFAULT_VALUE)
     val weightSettings by dataStore.getWeightSetting()
         .collectAsState(initial = COMBINE_WEIGHT_DEFAULT_VALUE)
-    val backgroundTimer by dataStore.getBackgroundTimerSetting()
-        .collectAsState(initial = false)
+//    val backgroundTimer by dataStore.getBackgroundTimerSetting()
+//        .collectAsState(initial = false)
     var showConfirmation by remember {
         mutableStateOf(false)
     }
@@ -66,7 +68,10 @@ fun Settings(navigateToLicenses: () -> Unit) {
             state = lazyListState,
             modifier = Modifier
                 .background(MaterialTheme.colors.background)
-                .rotaryWithScroll(scrollableState = lazyListState, focusRequester),
+                .rotaryScrollable(
+                    behavior = RotaryScrollableDefaults.behavior(lazyListState),
+                    focusRequester = focusRequester
+                ),
         ) {
             item {
                 Text(text = stringResource(id = R.string.settings_title))
@@ -215,7 +220,7 @@ fun Settings(navigateToLicenses: () -> Unit) {
                     Column {
                         Text(text = stringResource(id = R.string.app_version))
                         Text(
-                            text = versionName,
+                            text = versionName ?: "Unknown",
                             fontWeight = FontWeight.Light,
                         )
 

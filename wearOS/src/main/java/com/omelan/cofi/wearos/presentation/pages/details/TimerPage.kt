@@ -34,7 +34,6 @@ import androidx.wear.compose.material.*
 import androidx.wear.compose.material.dialog.Alert
 import androidx.wear.compose.material.dialog.Dialog
 import com.google.android.horologist.compose.ambient.AmbientAware
-import com.google.android.horologist.compose.ambient.AmbientState
 import com.google.android.horologist.compose.layout.fillMaxRectangle
 import com.omelan.cofi.share.R
 import com.omelan.cofi.share.components.TimeText
@@ -158,8 +157,8 @@ fun TimerPage(
         PositionIndicator(recipeDescriptionScrollState)
 
     }
-    AmbientAware(isTimerRunning) { ambientStateUpdate ->
-        val isAmbient = ambientStateUpdate.ambientState is AmbientState.Ambient
+    AmbientAware { ambientStateUpdate ->
+        val isAmbient = ambientStateUpdate.isAmbient
 
         Box(
             modifier = Modifier.fillMaxSize(),

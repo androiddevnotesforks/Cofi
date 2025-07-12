@@ -1,12 +1,13 @@
 package com.omelan.cofi.wearos.presentation.utils
 
 import android.content.Intent
-import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
+import androidx.concurrent.futures.await
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.wear.remote.interactions.RemoteActivityHelper
@@ -15,7 +16,6 @@ import com.google.android.gms.wearable.Wearable
 import com.omelan.cofi.share.utils.getActivity
 import com.omelan.cofi.share.utils.verify_cofi_phone_app
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -48,7 +48,7 @@ object WearUtils {
         val remoteActivityHelper = RemoteActivityHelper(activity)
         val intent = Intent(Intent.ACTION_VIEW)
             .addCategory(Intent.CATEGORY_BROWSABLE)
-            .setData(Uri.parse(link))
+            .setData(link.toUri())
 
         activity.lifecycleScope.launch {
             try {
