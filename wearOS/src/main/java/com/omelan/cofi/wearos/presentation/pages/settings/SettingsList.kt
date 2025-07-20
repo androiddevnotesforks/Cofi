@@ -4,20 +4,20 @@ package com.omelan.cofi.wearos.presentation.pages.settings
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
 import androidx.wear.compose.foundation.rotary.rotaryScrollable
-import androidx.wear.compose.material.*
+import androidx.wear.compose.material3.*
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.omelan.cofi.share.*
 import com.omelan.cofi.share.R
@@ -53,24 +53,17 @@ fun Settings(navigateToLicenses: () -> Unit) {
     val versionName = remember {
         context.packageManager.getPackageInfo(context.packageName, 0).versionName
     }
-    Scaffold(
-        vignette = {
-            Vignette(vignettePosition = VignettePosition.TopAndBottom)
-        },
-        positionIndicator = {
-            PositionIndicator(scalingLazyListState = lazyListState)
-        },
-        timeText = {
-            TimeText(Modifier.scrollAway(lazyListState))
+    ScreenScaffold(
+        scrollIndicator = {
+            ScrollIndicator(lazyListState)
         },
     ) {
         ScalingLazyColumn(
             state = lazyListState,
             modifier = Modifier
-                .background(MaterialTheme.colors.background)
                 .rotaryScrollable(
                     behavior = RotaryScrollableDefaults.behavior(lazyListState),
-                    focusRequester = focusRequester
+                    focusRequester = focusRequester,
                 ),
         ) {
             item {
@@ -102,30 +95,30 @@ fun Settings(navigateToLicenses: () -> Unit) {
 //                )
 //            }
             item {
-                ToggleChip(
+                SwitchButton(
+                    label = {
+                        Text(
+                            text = stringResource(id = R.string.settings_sync_with_phone),
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    },
                     checked = getSettingsFromPhone,
                     onCheckedChange = {
                         coroutineScope.launch {
                             dataStore.setSyncSettingsFromPhone(it)
                         }
                     },
-                    label = {
-                        Text(text = stringResource(id = R.string.settings_sync_with_phone))
-                    },
-                    toggleControl = {
-                        Switch(
-                            checked = getSettingsFromPhone,
-                            onCheckedChange = {
-                                coroutineScope.launch {
-                                    dataStore.setSyncSettingsFromPhone(it)
-                                }
-                            },
-                        )
-                    },
+                    enabled = true,
                 )
             }
             item {
-                ToggleChip(
+                SwitchButton(
+                    label = {
+                        Text(
+                            text = stringResource(id = R.string.settings_step_sound_item),
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    },
                     checked = stepChangeSound,
                     enabled = !getSettingsFromPhone,
                     onCheckedChange = {
@@ -133,24 +126,10 @@ fun Settings(navigateToLicenses: () -> Unit) {
                             dataStore.setStepChangeSound(it)
                         }
                     },
-                    label = {
-                        Text(text = stringResource(id = R.string.settings_step_sound_item))
-                    },
-                    toggleControl = {
-                        Switch(
-                            checked = stepChangeSound,
-                            enabled = !getSettingsFromPhone,
-                            onCheckedChange = {
-                                coroutineScope.launch {
-                                    dataStore.setStepChangeSound(it)
-                                }
-                            },
-                        )
-                    },
                 )
             }
             item {
-                ToggleChip(
+                SwitchButton(
                     checked = stepChangeVibration,
                     enabled = !getSettingsFromPhone,
                     onCheckedChange = {
@@ -159,24 +138,17 @@ fun Settings(navigateToLicenses: () -> Unit) {
                         }
                     },
                     label = {
-                        Text(text = stringResource(id = R.string.settings_step_vibrate_item))
-
-                    },
-                    toggleControl = {
-                        Switch(
-                            checked = stepChangeVibration,
-                            enabled = !getSettingsFromPhone,
-                            onCheckedChange = {
-                                coroutineScope.launch {
-                                    dataStore.setStepChangeVibration(it)
-                                }
-                            },
+                        Text(
+                            text = stringResource(id = R.string.settings_step_vibrate_item),
+                            overflow = TextOverflow.Ellipsis,
                         )
+
                     },
                 )
             }
             item {
-                ToggleChip(
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
                     label = {
                         Text(
                             text = stringResource(
@@ -185,7 +157,7 @@ fun Settings(navigateToLicenses: () -> Unit) {
                         )
                     },
                     enabled = !getSettingsFromPhone,
-                    onCheckedChange = {
+                    onClick = {
                         val values = CombineWeight.entries.toTypedArray()
                         coroutineScope.launch {
                             dataStore.selectCombineMethod(
@@ -195,20 +167,23 @@ fun Settings(navigateToLicenses: () -> Unit) {
                             )
                         }
                     },
-                    checked = true,
-                    toggleControl = {},
                 )
             }
             item {
                 Text(text = stringResource(id = R.string.step_type_other))
             }
             item {
-                Card(onClick = navigateToLicenses) {
-                    Text(text = stringResource(id = R.string.settings_licenses_item))
-                }
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = navigateToLicenses,
+                    label = {
+                        Text(text = stringResource(id = R.string.settings_licenses_item))
+                    },
+                )
             }
             item {
-                Card(
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         WearUtils.openLinkOnPhone(
                             "https://github.com/rozPierog/Cofi/blob/main/docs/Changelog.md",
@@ -216,16 +191,16 @@ fun Settings(navigateToLicenses: () -> Unit) {
                             onSuccess = { showConfirmation = true },
                         )
                     },
-                ) {
-                    Column {
+                    label = {
                         Text(text = stringResource(id = R.string.app_version))
+                    },
+                    secondaryLabel = {
                         Text(
                             text = versionName ?: "Unknown",
                             fontWeight = FontWeight.Light,
                         )
-
                     }
-                }
+                )
             }
         }
         OpenOnPhoneConfirm(isVisible = showConfirmation, onTimeout = { showConfirmation = false })
