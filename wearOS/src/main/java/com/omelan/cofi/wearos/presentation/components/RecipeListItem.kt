@@ -15,10 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.*
+import androidx.wear.compose.material3.Icon
+import androidx.wear.compose.material3.Text
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.omelan.cofi.share.model.Recipe
 
 @Composable
@@ -31,7 +33,6 @@ private fun RecipeListItemRaw(
     Card(
         modifier = modifier,
         onClick = onClick,
-        contentColor = MaterialTheme.colors.onSurface,
         role = Role.Button,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -88,7 +89,7 @@ fun RecipeListItem(modifier: Modifier = Modifier, recipe: Recipe?, onClick: () -
 
 }
 
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND)
+@Preview(device = WearDevices.SMALL_ROUND)
 @Composable
 fun RecipeListItemPreview() {
     Column {

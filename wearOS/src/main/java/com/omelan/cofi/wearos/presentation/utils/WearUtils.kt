@@ -52,7 +52,7 @@ object WearUtils {
 
         activity.lifecycleScope.launch {
             try {
-                remoteActivityHelper.startRemoteActivity(intent).await()
+                remoteActivityHelper.startRemoteActivity(intent, ).await()
                 onSuccess()
             } catch (cancellationException: CancellationException) {
                 // Request was cancelled normally

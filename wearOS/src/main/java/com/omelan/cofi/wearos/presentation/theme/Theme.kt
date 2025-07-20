@@ -1,17 +1,22 @@
 package com.omelan.cofi.wearos.presentation.theme
 
 import androidx.compose.runtime.Composable
-import androidx.wear.compose.material.MaterialTheme
+import androidx.compose.ui.platform.LocalContext
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.dynamicColorScheme
 
 @Composable
 fun CofiTheme(
     content: @Composable () -> Unit
 ) {
-    MaterialTheme(
-        colors = wearColorPalette,
-        typography = Typography,
-        // For shapes, we generally recommend using the default Material Wear shapes which are
-        // optimized for round and non-round devices.
+    val context = LocalContext.current
+    dynamicColorScheme(context)?.let {
+        MaterialTheme(
+            colorScheme = it,
+            content = content
+        )
+    } ?: MaterialTheme(
+        colorScheme = wearColorPalette,
         content = content
     )
 }

@@ -12,11 +12,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.ButtonDefaults
-import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.MaterialTheme
-import com.omelan.cofi.share.grey900
+import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ButtonDefaults
+import androidx.wear.compose.material3.Icon
+import androidx.wear.compose.material3.MaterialTheme
 import com.omelan.cofi.wearos.R
 
 @Composable
@@ -26,13 +25,13 @@ fun StartFAB(isTimerRunning: Boolean, onClick: () -> Unit) {
         if (it) 28.0f else 100f
     }
     val backgroundColor by transition.animateColor(label = "Fab color") {
-        if (it) grey900 else MaterialTheme.colors.primary
+        if (it) MaterialTheme.colorScheme.secondaryDim else MaterialTheme.colorScheme.primary
     }
     val iconColor by transition.animateColor(label = "Fab icon color") {
-        if (it) MaterialTheme.colors.onSecondary else MaterialTheme.colors.onPrimary
+        if (it) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary
     }
     val size by transition.animateDp(label = "Fab size") {
-        if (it) ButtonDefaults.SmallButtonSize else ButtonDefaults.LargeButtonSize
+        if (it) ButtonDefaults.CompactButtonHeight else ButtonDefaults.Height
     }
     val icon = remember(isTimerRunning) {
         if (isTimerRunning) R.drawable.ic_pause else R.drawable.ic_play
@@ -42,7 +41,7 @@ fun StartFAB(isTimerRunning: Boolean, onClick: () -> Unit) {
             .testTag("start_button")
             .size(size),
         onClick = onClick,
-        colors = ButtonDefaults.primaryButtonColors(backgroundColor, contentColor = iconColor),
+        colors = ButtonDefaults.buttonColors(backgroundColor, contentColor = iconColor),
         shape = RoundedCornerShape(animatedFabRadii),
     ) {
         Icon(painter = painterResource(icon), contentDescription = null)
