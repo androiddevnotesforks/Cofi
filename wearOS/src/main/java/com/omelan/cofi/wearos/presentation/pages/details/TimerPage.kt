@@ -6,20 +6,16 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.focusable
-import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
-import androidx.compose.ui.input.rotary.onRotaryScrollEvent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -30,9 +26,6 @@ import androidx.compose.ui.text.style.TextMotion
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.PositionIndicator
-import androidx.wear.compose.material.dialog.Alert
-import androidx.wear.compose.material.dialog.Dialog
 import androidx.wear.compose.material3.*
 import com.google.android.horologist.compose.ambient.AmbientAware
 import com.google.android.horologist.compose.layout.fillMaxRectangle
@@ -57,7 +50,7 @@ fun TimerPage(
     val (
         animationControllers,
         currentStep,
-        indexOfCurrentStep,
+        _,
         _,
         changeToNextStep,
         isDone,
@@ -89,12 +82,6 @@ fun TimerPage(
             }
         } else coroutineScope.launch { changeToNextStep(true) }
     }
-
-    val recipeDescriptionScrollState =
-        androidx.wear.compose.foundation.lazy.rememberScalingLazyListState(
-            initialCenterItemIndex = 0,
-            initialCenterItemScrollOffset = 0,
-        )
     val focusRequester = remember { FocusRequester() }
     val animatedBackgroundRadius by animateFloatAsState(
         targetValue = if (isDone) 200f else 1f,
@@ -125,20 +112,10 @@ fun TimerPage(
         }
     }
     Dialog(
-        showDialog = showDescriptionDialog,
+        visible = showDescriptionDialog,
         onDismissRequest = { showDescriptionDialog = false },
     ) {
-        Alert(
-            modifier = Modifier
-                .onRotaryScrollEvent {
-                    coroutineScope.launch {
-                        recipeDescriptionScrollState.scrollBy(it.verticalScrollPixels)
-                    }
-                    true
-                }
-                .focusRequester(focusRequester)
-                .focusable(),
-            scrollState = recipeDescriptionScrollState,
+        AlertDialogContent(
             contentPadding = PaddingValues(18.dp),
             icon = {
                 Icon(
@@ -155,8 +132,6 @@ fun TimerPage(
                 Spacer(modifier = Modifier.height(100.dp))
             }
         }
-        PositionIndicator(recipeDescriptionScrollState)
-
     }
     AmbientAware { ambientStateUpdate ->
         val isAmbient = ambientStateUpdate.isAmbient
@@ -202,7 +177,6 @@ fun TimerPage(
                 ),
                 startAngle = 300f,
                 endAngle = 240f,
-                strokeWidth = 5.dp,
             )
             Column(
                 modifier = Modifier.fillMaxRectangle(),
