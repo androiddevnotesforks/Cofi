@@ -1,31 +1,31 @@
 package com.omelan.cofi.wearos.presentation.components
 
-import androidx.compose.animation.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.dialog.Confirmation
+import androidx.wear.compose.material3.ConfirmationDialog
+import androidx.wear.compose.material3.ConfirmationDialogDefaults
+import androidx.wear.compose.material3.confirmationDialogCurvedText
 import com.omelan.cofi.wearos.R
 
 @Composable
 fun OpenOnPhoneConfirm(isVisible: Boolean, onTimeout: () -> Unit) {
-    AnimatedVisibility(
+    val curvedTextStyle = ConfirmationDialogDefaults.curvedTextStyle
+    val text = stringResource(R.string.common_open_on_phone)
+    ConfirmationDialog(
         visible = isVisible,
-        enter = fadeIn() + scaleIn(),
-        exit = fadeOut() + scaleOut(),
+        onDismissRequest = onTimeout,
+        curvedText = {
+            confirmationDialogCurvedText(
+                text,
+                curvedTextStyle,
+            )
+        },
     ) {
-        Confirmation(
-            onTimeout = onTimeout,
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.common_full_open_on_phone),
-                    contentDescription = "",
-                )
-            },
-        ) {
-            Text(text = stringResource(id = R.string.common_open_on_phone))
-        }
+        Icon(
+            painter = painterResource(id = R.drawable.common_full_open_on_phone),
+            contentDescription = "",
+        )
     }
 }
