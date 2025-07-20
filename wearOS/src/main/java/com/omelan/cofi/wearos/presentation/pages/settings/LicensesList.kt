@@ -45,6 +45,7 @@ fun LicensesList() {
     }
 
     ScreenScaffold(
+        scrollState = scalingLazyListState,
         scrollIndicator = {
             ScrollIndicator(scalingLazyListState)
         },

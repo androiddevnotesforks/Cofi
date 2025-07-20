@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.example.compose.*
 import com.omelan.cofi.model.DYNAMIC_THEME_DEFAULT_VALUE
@@ -73,7 +74,7 @@ private val darkScheme by lazy {
         onError = onErrorDark,
         errorContainer = errorContainerDark,
         onErrorContainer = onErrorContainerDark,
-        background = backgroundDark,
+        background = Color(0xFF000000),
         onBackground = onBackgroundDark,
         surface = surfaceDark,
         onSurface = onSurfaceDark,

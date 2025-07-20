@@ -3,9 +3,9 @@ package com.omelan.cofi.wearos.presentation.components
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material3.ConfirmationDialog
 import androidx.wear.compose.material3.ConfirmationDialogDefaults
+import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.confirmationDialogCurvedText
 import com.omelan.cofi.wearos.R
 

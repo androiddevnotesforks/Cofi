@@ -54,6 +54,7 @@ fun Settings(navigateToLicenses: () -> Unit) {
         context.packageManager.getPackageInfo(context.packageName, 0).versionName
     }
     ScreenScaffold(
+        scrollState = lazyListState,
         scrollIndicator = {
             ScrollIndicator(lazyListState)
         },
