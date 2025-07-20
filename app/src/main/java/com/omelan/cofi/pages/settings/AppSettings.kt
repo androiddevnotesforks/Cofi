@@ -2,9 +2,12 @@
 
 package com.omelan.cofi.pages.settings
 
-import android.app.Activity
+import androidx.activity.compose.LocalActivity
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Face
@@ -12,8 +15,8 @@ import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,6 +30,13 @@ import com.omelan.cofi.components.createAppBarBehavior
 import com.omelan.cofi.utils.WearUtils
 import com.omelan.cofi.utils.getDefaultPadding
 
+data class AppSetting(
+    @StringRes val title: Int,
+    @DrawableRes val icon: Int? = null,
+    val imageVector: ImageVector? = null,
+    val onClick: () -> Unit,
+)
+
 @Composable
 fun AppSettings(
     goBack: () -> Unit,
@@ -37,7 +47,7 @@ fun AppSettings(
 ) {
     val uriHandler = LocalUriHandler.current
     val appBarBehavior = createAppBarBehavior()
-    val activity = LocalContext.current as Activity
+    val activity = LocalActivity.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
     var wearNodesWithoutApp by remember {
@@ -46,6 +56,49 @@ fun AppSettings(
     WearUtils.ObserveIfWearAppInstalled {
         wearNodesWithoutApp = it
     }
+
+    val settingsList = listOf(
+        AppSetting(
+            title = R.string.settings_timer_item,
+            icon = R.drawable.ic_timer,
+            onClick = { goToTimerSettings },
+        ),
+        AppSetting(
+            title = R.string.settings_backup_item,
+            icon = R.drawable.ic_save,
+            onClick = { goToBackupRestore },
+        ),
+        AppSetting(
+            title = R.string.settings_appearance_item,
+            imageVector = Icons.Rounded.Face,
+            onClick = { gotToAppearance },
+        ),
+        AppSetting(
+            title = R.string.settings_about_item,
+            imageVector = Icons.Rounded.Info,
+            onClick = { goToAbout },
+        ),
+        if (activity != null && wearNodesWithoutApp.isNotEmpty()) AppSetting(
+            title = R.string.settings_wearOS_item,
+            icon = R.drawable.ic_watch,
+            onClick = {
+                WearUtils.openPlayStoreOnWearDevicesWithoutApp(
+                    lifecycleOwner,
+                    activity,
+                    wearNodesWithoutApp,
+                )
+            },
+        ) else null,
+        AppSetting(
+            title = R.string.settings_bug_item,
+            icon = R.drawable.ic_bug_report,
+            onClick = {
+                uriHandler.openUri("https://github.com/rozPierog/Cofi/issues")
+            },
+        ),
+    )
+
+
     Scaffold(
         topBar = {
             PiPAwareAppBar(
@@ -78,92 +131,28 @@ fun AppSettings(
                 additionalEndPadding = 0.dp,
             ),
         ) {
-            item {
+            itemsIndexed(
+                items = settingsList.filterNotNull(),
+                key = { i, item -> item.title },
+            ) { index, setting ->
                 ListItem(
                     headlineContent = {
-                        Text(text = stringResource(id = R.string.settings_timer_item))
+                        Text(text = stringResource(id = setting.title))
                     },
                     leadingContent = {
-                        Icon(
-                            painterResource(id = R.drawable.ic_timer),
-                            contentDescription = null,
-                        )
-                    },
-                    modifier = Modifier.settingsItemModifier(onClick = goToTimerSettings),
-                )
-            }
-            item {
-                ListItem(
-                    headlineContent = {
-                        Text(text = stringResource(id = R.string.settings_backup_item))
-                    },
-                    leadingContent = {
-                        Icon(
-                            painterResource(id = R.drawable.ic_save),
-                            contentDescription = null,
-                        )
-                    },
-                    modifier = Modifier.settingsItemModifier(onClick = goToBackupRestore),
-                )
-            }
-            item {
-                ListItem(
-                    headlineContent = {
-                        Text(text = "Apperence")
-                    },
-                    leadingContent = { Icon(Icons.Rounded.Face, contentDescription = null) },
-                    modifier = Modifier.settingsItemModifier(onClick = gotToAppearance),
-                )
-            }
-            item {
-                ListItem(
-                    headlineContent = {
-                        Text(text = stringResource(id = R.string.settings_about_item))
-                    },
-                    leadingContent = { Icon(Icons.Rounded.Info, contentDescription = null) },
-                    modifier = Modifier.settingsItemModifier(onClick = goToAbout),
-                )
-            }
-            if (wearNodesWithoutApp.isNotEmpty()) {
-                item {
-                    ListItem(
-                        headlineContent = {
-                            Text(text = stringResource(id = R.string.settings_wearOS_item))
-                        },
-                        leadingContent = {
+                        if (setting.icon != null) {
                             Icon(
-                                painterResource(id = R.drawable.ic_watch),
+                                painter = painterResource(id = setting.icon),
                                 contentDescription = null,
                             )
-                        },
-                        modifier = Modifier.settingsItemModifier(
-                            onClick = {
-                                WearUtils.openPlayStoreOnWearDevicesWithoutApp(
-                                    lifecycleOwner,
-                                    activity,
-                                    wearNodesWithoutApp,
-                                )
-                            },
-                        ),
-                    )
-                }
-            }
-            item {
-                ListItem(
-                    headlineContent = {
-                        Text(text = stringResource(id = R.string.settings_bug_item))
+                        } else if (setting.imageVector != null) {
+                            Icon(
+                                imageVector = setting.imageVector,
+                                contentDescription = null,
+                            )
+                        }
                     },
-                    leadingContent = {
-                        Icon(
-                            painterResource(id = R.drawable.ic_bug_report),
-                            contentDescription = null,
-                        )
-                    },
-                    modifier = Modifier.settingsItemModifier(
-                        onClick = {
-                            uriHandler.openUri("https://github.com/rozPierog/Cofi/issues")
-                        },
-                    ),
+                    modifier = Modifier.settingsItemModifier(onClick = setting.onClick),
                 )
             }
         }
