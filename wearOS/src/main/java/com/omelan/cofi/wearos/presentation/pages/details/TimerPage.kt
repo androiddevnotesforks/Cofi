@@ -57,7 +57,7 @@ fun TimerPage(
     val (
         animationControllers,
         currentStep,
-        _,
+        indexOfCurrentStep,
         _,
         changeToNextStep,
         isDone,
@@ -162,7 +162,9 @@ fun TimerPage(
         val isAmbient = ambientStateUpdate.isAmbient
 
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(CircularProgressIndicatorDefaults.FullScreenPadding),
             contentAlignment = Alignment.Center,
         ) {
             Canvas(
@@ -183,9 +185,9 @@ fun TimerPage(
             )
             CircularProgressIndicator(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(4.dp),
-                progress = { if (isDone) 1f else animatedProgressValue.value },
+                    .fillMaxSize(),
+                progress = {  animatedProgressValue.value },
+                allowProgressOverflow = true,
                 colors = ProgressIndicatorDefaults.colors(
                     indicatorColor = if (isAmbient) {
                         Color.White
