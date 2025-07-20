@@ -4,7 +4,6 @@ package com.omelan.cofi.wearos.presentation.pages.settings
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,7 +20,10 @@ import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
 import androidx.wear.compose.foundation.rotary.rotaryScrollable
-import androidx.wear.compose.material.*
+import androidx.wear.compose.material3.Card
+import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.ScrollIndicator
+import androidx.wear.compose.material3.Text
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.omelan.cofi.share.model.Dependency
 import com.omelan.cofi.share.model.License
@@ -42,20 +44,13 @@ fun LicensesList() {
         FocusRequester()
     }
 
-    Scaffold(
-        vignette = {
-            Vignette(vignettePosition = VignettePosition.TopAndBottom)
-        },
-        positionIndicator = {
-            PositionIndicator(scalingLazyListState)
-        },
-        timeText = {
-            TimeText(Modifier.scrollAway(scalingLazyListState, 0))
+    ScreenScaffold(
+        scrollIndicator = {
+            ScrollIndicator(scalingLazyListState)
         },
     ) {
         ScalingLazyColumn(
             modifier = Modifier
-                .background(MaterialTheme.colors.background)
                 .rotaryScrollable(
                     behavior = RotaryScrollableDefaults.behavior(scalingLazyListState),
                     focusRequester = focusRequester,
