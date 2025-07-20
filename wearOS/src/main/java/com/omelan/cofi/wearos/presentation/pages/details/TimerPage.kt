@@ -161,7 +161,7 @@ fun TimerPage(
             CircularProgressIndicator(
                 modifier = Modifier
                     .fillMaxSize(),
-                progress = {  animatedProgressValue.value },
+                progress = { animatedProgressValue.value },
                 allowProgressOverflow = true,
                 colors = ProgressIndicatorDefaults.colors(
                     indicatorColor = if (isAmbient) {
@@ -191,7 +191,9 @@ fun TimerPage(
                     when {
                         isDone -> {
                             Column(
-                                modifier = Modifier.animateContentSize(),
+                                modifier = Modifier
+                                    .animateContentSize()
+                                    .padding(top = CircularProgressIndicatorDefaults.largeStrokeWidth),
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
