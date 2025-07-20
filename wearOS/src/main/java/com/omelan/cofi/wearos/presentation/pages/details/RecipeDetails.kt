@@ -5,13 +5,8 @@ package com.omelan.cofi.wearos.presentation.pages.details
 
 import android.view.Window
 import android.view.WindowManager
-import androidx.compose.animation.core.TweenSpec
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -24,7 +19,11 @@ import androidx.navigation.navArgument
 import androidx.wear.compose.foundation.SwipeToDismissBoxDefaults
 import androidx.wear.compose.foundation.SwipeToDismissBoxState
 import androidx.wear.compose.foundation.edgeSwipeToDismiss
-import androidx.wear.compose.material.*
+import androidx.wear.compose.foundation.pager.HorizontalPager
+import androidx.wear.compose.foundation.pager.rememberPagerState
+import androidx.wear.compose.material3.HorizontalPagerScaffold
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.Text
 import androidx.wear.compose.navigation.composable
 import com.google.android.horologist.compose.ambient.AmbientAware
 import com.omelan.cofi.share.DataStore
@@ -129,28 +128,15 @@ fun RecipeDetails(
             }
         }
     }
-    val pagerState = rememberPagerState(pageCount = { PAGE_COUNT })
-    val animatedSelectedPage by animateFloatAsState(
-        targetValue = pagerState.currentPage.toFloat(),
-        animationSpec = TweenSpec(durationMillis = 500),
-        label = "Selected page",
-    )
-    val pageIndicatorState: PageIndicatorState = remember {
-        object : PageIndicatorState {
-            override val pageOffset: Float
-                get() = animatedSelectedPage - pagerState.currentPage
-            override val selectedPage: Int
-                get() = pagerState.currentPage
-            override val pageCount: Int
-                get() = PAGE_COUNT
-        }
-    }
+    val pagerState =
+        rememberPagerState(pageCount = { PAGE_COUNT })
+
     val timerControllers = Timer.createTimerControllers(
         recipe = recipe,
         steps = steps,
         onRecipeEnd = { },
         dataStore = dataStore,
-        doneTrackColor = MaterialTheme.colors.primary,
+        doneTrackColor = MaterialTheme.colorScheme.primary,
     )
 //    val context = LocalContext.current
 
@@ -180,16 +166,8 @@ fun RecipeDetails(
                 pagerState.scrollToPage(0)
             }
         }
-        Scaffold(
-            timeText = {
-                TimeText()
-            },
-            pageIndicator = {
-                HorizontalPageIndicator(
-                    pageIndicatorState = pageIndicatorState,
-                    modifier = Modifier.padding(10.dp),
-                )
-            },
+        HorizontalPagerScaffold(
+            pagerState = pagerState,
         ) {
             HorizontalPager(modifier = modifier, state = pagerState) { page ->
                 when (page) {

@@ -15,9 +15,9 @@ import androidx.compose.ui.input.rotary.onRotaryScrollEvent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.Stepper
-import androidx.wear.compose.material.Text
+import androidx.wear.compose.material3.Icon
+import androidx.wear.compose.material3.Stepper
+import androidx.wear.compose.material3.Text
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.omelan.cofi.share.utils.roundToDecimals
 import com.omelan.cofi.wearos.R

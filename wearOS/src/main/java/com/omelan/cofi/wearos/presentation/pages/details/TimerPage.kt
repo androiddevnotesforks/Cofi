@@ -30,9 +30,10 @@ import androidx.compose.ui.text.style.TextMotion
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.*
+import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.dialog.Alert
 import androidx.wear.compose.material.dialog.Dialog
+import androidx.wear.compose.material3.*
 import com.google.android.horologist.compose.ambient.AmbientAware
 import com.google.android.horologist.compose.layout.fillMaxRectangle
 import com.omelan.cofi.share.R
@@ -184,17 +185,19 @@ fun TimerPage(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(4.dp),
-                progress = if (isDone) 1f else animatedProgressValue.value,
-                indicatorColor = if (isAmbient) {
-                    Color.White
-                } else {
-                    animatedProgressColor.value
-                },
-                trackColor = if (isAmbient) {
-                    MaterialTheme.colors.onBackground.copy(alpha = 0.1f)
-                } else {
-                    animatedProgressColor.value.copy(alpha = 0.2f)
-                },
+                progress = { if (isDone) 1f else animatedProgressValue.value },
+                colors = ProgressIndicatorDefaults.colors(
+                    indicatorColor = if (isAmbient) {
+                        Color.White
+                    } else {
+                        animatedProgressColor.value
+                    },
+                    trackColor = if (isAmbient) {
+                        MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f)
+                    } else {
+                        animatedProgressColor.value.copy(alpha = 0.2f)
+                    },
+                ),
                 startAngle = 300f,
                 endAngle = 240f,
                 strokeWidth = 5.dp,
@@ -218,9 +221,9 @@ fun TimerPage(
                             ) {
                                 Text(
                                     text = stringResource(id = R.string.timer_enjoy),
-                                    color = MaterialTheme.colors.onSurface,
+                                    color = MaterialTheme.colorScheme.onSurface,
                                     maxLines = 2,
-                                    style = MaterialTheme.typography.title1,
+                                    style = MaterialTheme.typography.titleLarge,
                                     textAlign = TextAlign.Center,
                                     overflow = TextOverflow.Ellipsis,
                                 )
@@ -236,14 +239,14 @@ fun TimerPage(
                                 TimeText(
                                     currentStep = currentStep,
                                     animatedProgressValue = animatedProgressValue.value * timeMultiplier,
-                                    color = MaterialTheme.colors.onSurface,
+                                    color = MaterialTheme.colorScheme.onSurface,
                                     maxLines = 2,
-                                    style = MaterialTheme.typography.title2,
+                                    style = MaterialTheme.typography.titleMedium,
                                     paddingHorizontal = 2.dp,
                                     showMillis = false,
                                 )
                                 AnimatedContent(currentStep, label = "Step label") {
-                                    val style = MaterialTheme.typography.title3.copy(
+                                    val style = MaterialTheme.typography.titleSmall.copy(
                                         textMotion = TextMotion.Animated,
                                     )
                                     var textStyle by remember { mutableStateOf(style) }
@@ -263,7 +266,7 @@ fun TimerPage(
                                         } else {
                                             it.name
                                         },
-                                        color = MaterialTheme.colors.onSurface,
+                                        color = MaterialTheme.colorScheme.onSurface,
                                         style = textStyle,
                                         onTextLayout = { textLayoutResult: TextLayoutResult ->
                                             if (textLayoutResult.hasVisualOverflow ||
@@ -291,9 +294,9 @@ fun TimerPage(
                                     animatedProgressValue = animatedProgressValue.value,
                                     weightMultiplier = weightMultiplier,
                                     alreadyDoneWeight = alreadyDoneWeight,
-                                    color = MaterialTheme.colors.onSurface,
+                                    color = MaterialTheme.colorScheme.onSurface,
                                     maxLines = 1,
-                                    style = MaterialTheme.typography.title1,
+                                    style = MaterialTheme.typography.titleLarge,
                                 )
                             }
                         }
@@ -306,12 +309,12 @@ fun TimerPage(
                                 ) {
                                     Text(
                                         text = recipe.name,
-                                        color = MaterialTheme.colors.onSurface,
+                                        color = MaterialTheme.colorScheme.onSurface,
                                         maxLines = if (recipe.description.isNotBlank()) 1 else 2,
                                         textAlign = TextAlign.Center,
                                         style = if (recipe.description.isNotBlank())
-                                            MaterialTheme.typography.title2 else
-                                            MaterialTheme.typography.title1,
+                                            MaterialTheme.typography.titleMedium else
+                                            MaterialTheme.typography.titleLarge,
                                         overflow = TextOverflow.Ellipsis,
                                     )
                                     if (recipe.description.isNotBlank()) {
@@ -324,7 +327,7 @@ fun TimerPage(
                                             onClick = { showDescriptionDialog = true },
                                             modifier = Modifier
                                                 .padding(top = 8.dp)
-                                                .height(ButtonDefaults.ExtraSmallButtonSize)
+                                                .height(ButtonDefaults.CompactButtonHeight)
                                                 .fillMaxWidth(),
                                         ) {
                                             Text(
