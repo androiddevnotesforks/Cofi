@@ -39,7 +39,7 @@ fun RecipeListInfoBox(
         enableDismissFromStartToEnd = true,
         enableDismissFromEndToStart = false,
     ) {
-        RecipeListItemBackground(
+        ListItemBackground(
             modifier.padding(bottom = Spacing.small),
             contentPadding = PaddingValues(start = Spacing.big, bottom = Spacing.big),
             shape = ItemShape.Only,
