@@ -1,5 +1,6 @@
 package com.omelan.cofi.wearos.presentation.theme
 
+import androidx.compose.ui.graphics.Color
 import androidx.wear.compose.material3.ColorScheme
 import com.example.compose.*
 
@@ -20,7 +21,7 @@ internal val wearColorPalette: ColorScheme = ColorScheme(
     onError = onErrorDark,
     errorContainer = errorContainerDark,
     onErrorContainer = onErrorContainerDark,
-    background = backgroundDark,
+    background = Color.Black,
     onBackground = onBackgroundDark,
     onSurface = onSurfaceDark,
     outline = outlineDark,
