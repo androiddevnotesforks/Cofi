@@ -4,6 +4,7 @@ package com.omelan.cofi.wearos.presentation.pages.settings
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -151,11 +152,9 @@ fun Settings(navigateToLicenses: () -> Unit) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     label = {
-                        Text(
-                            text = stringResource(
-                                stringToCombineWeight(weightSettings).settingsStringId,
-                            ),
-                        )
+                        AnimatedContent(stringToCombineWeight(weightSettings).settingsStringId) {
+                            Text(text = stringResource(it),)
+                        }
                     },
                     enabled = !getSettingsFromPhone,
                     onClick = {
@@ -200,7 +199,7 @@ fun Settings(navigateToLicenses: () -> Unit) {
                             text = versionName ?: "Unknown",
                             fontWeight = FontWeight.Light,
                         )
-                    }
+                    },
                 )
             }
         }
