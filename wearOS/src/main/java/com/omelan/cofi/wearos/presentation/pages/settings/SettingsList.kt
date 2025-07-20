@@ -153,7 +153,7 @@ fun Settings(navigateToLicenses: () -> Unit) {
                     modifier = Modifier.fillMaxWidth(),
                     label = {
                         AnimatedContent(stringToCombineWeight(weightSettings).settingsStringId) {
-                            Text(text = stringResource(it),)
+                            Text(text = stringResource(it))
                         }
                     },
                     enabled = !getSettingsFromPhone,

@@ -53,7 +53,7 @@ private fun RecipeListItemRaw(
 @Composable
 fun RecipeListItem(modifier: Modifier = Modifier, recipe: Recipe?, onClick: () -> Unit = {}) {
     val placeholderState = rememberPlaceholderState(
-        recipe?.name != null,
+        recipe?.name == null,
     )
     AnimatedContent(
         targetState = recipe,

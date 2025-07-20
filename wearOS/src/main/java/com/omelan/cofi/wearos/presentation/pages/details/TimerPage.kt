@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -82,18 +81,12 @@ fun TimerPage(
             }
         } else coroutineScope.launch { changeToNextStep(true) }
     }
-    val focusRequester = remember { FocusRequester() }
     val animatedBackgroundRadius by animateFloatAsState(
         targetValue = if (isDone) 200f else 1f,
         label = "background animation",
         animationSpec = tween(500, easing = FastOutSlowInEasing),
     )
 
-    LaunchedEffect(showDescriptionDialog) {
-        if (showDescriptionDialog) {
-            focusRequester.requestFocus()
-        }
-    }
     ListenKeyEvents { keyCode, event ->
         if (event.repeatCount == 0) {
             when (keyCode) {
