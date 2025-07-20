@@ -1,6 +1,5 @@
 package com.omelan.cofi.wearos.presentation.pages
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +21,7 @@ import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
 import androidx.wear.compose.foundation.rotary.rotaryScrollable
-import androidx.wear.compose.material.*
+import androidx.wear.compose.material3.*
 import androidx.wear.compose.navigation.composable
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
@@ -78,15 +77,18 @@ fun RecipeList(
     val lazyListState = rememberScalingLazyListState()
     val focusRequester = remember { FocusRequester() }
 
-    Scaffold(
-        positionIndicator = {
-            PositionIndicator(scalingLazyListState = lazyListState)
+    ScreenScaffold(
+        scrollState = lazyListState,
+        edgeButton = {
+            EdgeButton(onClick = openSettings) {
+                Icon(
+                    painterResource(id = R.drawable.ic_settings),
+                    contentDescription = "",
+                )
+            }
         },
-        timeText = {
-            TimeText(Modifier.scrollAway(lazyListState))
-        },
-        vignette = {
-            Vignette(vignettePosition = VignettePosition.TopAndBottom)
+        scrollIndicator = {
+            ScrollIndicator(lazyListState)
         },
     ) {
         ScalingLazyColumn(
@@ -95,8 +97,7 @@ fun RecipeList(
                 .rotaryScrollable(
                     behavior = RotaryScrollableDefaults.behavior(lazyListState),
                     focusRequester = focusRequester,
-                )
-                .background(MaterialTheme.colors.background),
+                ),
             state = lazyListState,
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
@@ -126,14 +127,6 @@ fun RecipeList(
             items(recipes) {
                 RecipeListItem(recipe = it) {
                     if (it != null) goToDetails(it)
-                }
-            }
-            item {
-                Button(onClick = openSettings) {
-                    Icon(
-                        painterResource(id = R.drawable.ic_settings),
-                        contentDescription = "",
-                    )
                 }
             }
         }

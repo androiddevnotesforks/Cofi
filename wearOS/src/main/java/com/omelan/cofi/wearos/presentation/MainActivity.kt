@@ -3,8 +3,11 @@ package com.omelan.cofi.wearos.presentation
 import android.os.Bundle
 import android.view.KeyEvent
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.navigation
 import androidx.wear.compose.foundation.rememberSwipeToDismissBoxState
@@ -12,6 +15,7 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavHostState
+import com.google.android.horologist.compose.layout.AppScaffold
 import com.omelan.cofi.share.pages.Destinations
 import com.omelan.cofi.wearos.presentation.components.KeyEventHandler
 import com.omelan.cofi.wearos.presentation.pages.details.recipeDetails
@@ -28,7 +32,6 @@ class MainActivity : FragmentActivity() {
     }
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -39,26 +42,33 @@ class MainActivity : FragmentActivity() {
             val navController = rememberSwipeDismissableNavController()
             CompositionLocalProvider(LocalKeyEventHandlers provides keyEventHandlers) {
                 CofiTheme {
-                    SwipeDismissableNavHost(
-                        navController = navController,
-                        state = swipeDismissableNavHostState,
-                        startDestination = Destinations.RECIPE_LIST,
+                    AppScaffold(
+                        modifier = Modifier.background(Color.Black)
                     ) {
-                        recipeList(navController)
-                        recipeDetails(edgeSwipeToDismissBoxState, window)
-                        navigation(Destinations.SETTINGS_LIST, route = Destinations.SETTINGS) {
-                            composable(Destinations.SETTINGS_LIST) {
-                                Settings(
-                                    navigateToLicenses = {
-                                        navController.navigate(Destinations.SETTINGS_LICENSES)
-                                    },
-                                )
-                            }
-                            composable(Destinations.SETTINGS_LICENSES) {
-                                LicensesList()
+                            SwipeDismissableNavHost(
+                                navController = navController,
+                                state = swipeDismissableNavHostState,
+                                startDestination = Destinations.RECIPE_LIST,
+                            ) {
+                                recipeList(navController)
+                                recipeDetails(edgeSwipeToDismissBoxState, window)
+                                navigation(
+                                    Destinations.SETTINGS_LIST,
+                                    route = Destinations.SETTINGS,
+                                ) {
+                                    composable(Destinations.SETTINGS_LIST) {
+                                        Settings(
+                                            navigateToLicenses = {
+                                                navController.navigate(Destinations.SETTINGS_LICENSES)
+                                            },
+                                        )
+                                    }
+                                    composable(Destinations.SETTINGS_LICENSES) {
+                                        LicensesList()
+                                    }
+                                }
                             }
                         }
-                    }
                 }
             }
         }
